@@ -1,6 +1,6 @@
 module stdc.memory.allocators;
 import std.traits : isBasicType;
-improt std.typecons : Ternary;
+import std.typecons : Ternary;
 
 signature Allocator {
     @property @nogc nothrow {
