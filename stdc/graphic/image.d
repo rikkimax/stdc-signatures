@@ -159,3 +159,43 @@ struct SwapableImage(NewColor, IImage:Image) {
         }
     }
 }
+
+struct SharedSwapableImage(NewColor, IImage:SharedImage) {
+    alias Color = NewColor;
+    static assert(is(NewColor : stdccolor.Color), "A SwapableImage Color must match the stdc.graphic.color Color definition.");
+    
+    shared(IImage) source;
+    
+    @property @nogc nothrow @safe shared {
+        IndexType width() { return source.width; }
+        IndexType height() { return source.height; }
+    }
+    
+    static if (is(IImage : SharedIndexedImage)) {
+        Color opIndex(IndexType x, IndexType y) @nogc @safe shared {
+            return cast(Color)source[x, y];
+        }
+        
+        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe shared {
+            source[x, y] = cast(IImage.Color)stdccolor.Color(v);
+        }
+        
+        void resize(IndexType newWidth, IndexType newHeight) @safe shared {
+            source.resize(newWidth, newHeight);
+        }
+    }
+    
+    static if (is(IImage : SharedUniformImage)) {
+        Color opIndex(IndexType i) @nogc @safe shared {
+            return cast(Color)source[i];
+        }
+        
+        void opIndexAssign(Color v, IndexType i) @nogc @safe shared {
+            source[i] = cast(IImage.Color)stdccolor.Color(v);
+        }
+        
+        void resize(IndexType newLength) @safe shared {
+            source.resize(newLength);
+        }
+    }
+}
