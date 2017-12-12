@@ -119,3 +119,43 @@ signature SharedIndexedImage : SharedImageBase {
 
 signature Image : UniformImage, IndexedImage {}
 signature SharedImage : SharedUniformImage, SharedIndexedImage {}
+
+struct SwapableImage(NewColor, IImage:Image) {
+    alias Color = NewColor;
+    static assert(is(NewColor : stdccolor.Color), "A SwapableImage Color must match the stdc.graphic.color Color definition.");
+    
+    IImage source;
+    
+    @property @nogc nothrow @safe {
+        IndexType width() { return source.width; }
+        IndexType height() { return source.height; }
+    }
+    
+    static if (is(IImage : IndexedImage)) {
+        Color opIndex(IndexType x, IndexType y) @nogc @safe {
+            return cast(Color)source[x, y];
+        }
+        
+        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe {
+            source[x, y] = cast(IImage.Color)stdccolor.Color(v);
+        }
+        
+        void resize(IndexType newWidth, IndexType newHeight) @safe {
+            source.resize(newWidth, newHeight);
+        }
+    }
+    
+    static if (is(IImage : UniformImage)) {
+        Color opIndex(IndexType i) @nogc @safe {
+            return cast(Color)source[i];
+        }
+        
+        void opIndexAssign(Color v, IndexType i) @nogc @safe {
+            source[i] = cast(IImage.Color)stdccolor.Color(v);
+        }
+        
+        void resize(IndexType newLength) @safe {
+            source.resize(newLength);
+        }
+    }
+}
