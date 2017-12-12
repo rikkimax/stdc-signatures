@@ -12,7 +12,7 @@ signature ImageBase {
 
     @property @nogc nothrow @safe {
         IndexType width();
-        IndexType height();
+        IndexType height() { return 1; }
     }
 }
 
@@ -25,7 +25,7 @@ signature SharedImageBase {
 
     @property @nogc nothrow @safe shared {
         IndexType width();
-        IndexType height();
+        IndexType height() { return 1; }
     }
 }
 
