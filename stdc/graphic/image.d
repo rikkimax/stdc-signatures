@@ -16,7 +16,7 @@ signature ImageBase {
     }
 }
 
-signature SharedImage {
+signature SharedImageBase {
     alias Color;
     alias IndexType;
     
