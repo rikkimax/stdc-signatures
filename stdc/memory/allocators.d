@@ -1,5 +1,6 @@
 module stdc.memory.allocators;
-import std.traits : isBasicType;
+import stdc.range : InputRange;
+import std.traits : isBasicType, Unqual;
 import std.typecons : Ternary;
 
 signature Allocator {
@@ -57,8 +58,13 @@ T[] makeArray(T, IAllocator:Allocator)(scope IAllocator alloc, size_t length, au
     assert(0);   
 }
 
-// TODO: Unqual!(ElementEncodingType!R)[] makeArray(Allocator, R)(auto ref Allocator alloc, R range) if (isInputRange!R && !isInfinite!R); 
-// TODO: T[] makeArray(T, Allocator, R)(auto ref Allocator alloc, R range) if (isInputRange!R && !isInfinite!R);
+Unqual!(R.Type)[] makeArray(IAllocator:Allocator, R)(scope IAllocator alloc, R range) if (is(R : InputRange) && !is(R : InfiniteInputRange)) {
+    assert(0); 
+}
+
+T[] makeArray(T, IAllocator:Allocator, R)(scope IAllocator alloc, R range) if (is(R : InputRange) && !is(R : InfiniteInputRange)) {
+    assert(0);
+}
 
 bool expandArray(T, IAllocator:Allocator)(scope IAllocator alloc, ref T[] array, size_t delta) {
     T default;
@@ -69,7 +75,9 @@ bool expandArray(T, IAllocator:Allocator)(scope IAllocator alloc, ref T[] array,
     assert(0);
 }
 
-// TODO: bool expandArray(T, Allocator, R)(auto ref Allocator alloc, ref T[] array, R range) if (isInputRange!R);
+bool expandArray(T, IAllocator:Allocator, IRange:InputRange)(scope IAllocator alloc, refT[] array, IRange range) {
+    assert(0);
+}
 
 bool shrinkArray(T, IAllocator:Allocator)(scope IAllocator alloc, ref T[] array, size_t delta) {
     assert(0);   
@@ -94,4 +102,3 @@ auto makeMultiDimensionalArray(T, IAllocator:Allocator, size_t N)(scope Allocato
 void disposeMultiDimensionalArray(T, IAllocator:Allocator)(scope Allocator alloc, auto ref T[] array) {
     assert(0);   
 }
-   
