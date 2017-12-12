@@ -5,7 +5,7 @@ import std.math : floor;
 
 signature ImageBase {
     alias Color;
-    alias IndexType;
+    alias IndexType=size_t;
     
     static assert(is(Color : stdccolor.Color), "An image Color must match the stdc.graphic.color Color definition.");
     static assert(isIntegral!IndexType, "An image IndexType must be an integer");
