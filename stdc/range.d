@@ -14,7 +14,6 @@ signature InputRange {
     
     int opApply(scope int delegate(Type));
     int opApply(scope int delegate(size_t, Type));
-
 }
 
 signature InputAssignable : InputRange {
@@ -95,4 +94,9 @@ signature OutputRange {
     }
     
     void put(Type);
+}
+
+signature InfiniteInputRange : InputRange {
+    enum bool empty;
+    static assert(!empty);
 }
