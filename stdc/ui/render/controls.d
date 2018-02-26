@@ -33,7 +33,27 @@ private {
   }
 }
 
-signature PushButton : UIModel {
+signature Font {
+  string name;
+  ushort size;
+  bool italic, bold;
+  //...
+}
+
+signature Text : UIModel {
+  string value;
+  Font font;
+}
+
+signature Image : UIModel {
+  import graphic_image = stdc.graphic.image;
+  
+  graphic_image.Image value;
+}
+
+signature Button : UIModel {}
+
+signature PushButton : Button {
   State state;
   
   enum State {
