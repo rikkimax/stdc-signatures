@@ -30,91 +30,71 @@ signature SharedImageBase {
 }
 
 signature UniformImage : ImageBase {
-    static if (is(typeof(this):IndexedImage)) {
-        Color opIndex(IndexType i) @nogc @safe {
-            // !__traits(compiles, {typeof(this) t; Color c = t.opIndex(IndexType.init);})
-            return IndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)];
-        }
-        
-        void opIndexAssign(Color v, IndexType i) @nogc @safe {
-            // !__traits(compiles, {typeof(this) t; t.opIndexAssign(Color.init, IndexType.init);})
-            IndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)] = v;
-        }
-        
-        void resize(IndexType newLength) @safe {
-            IndexedImage(this).resize(cast(IndexType)(newLength % width), cast(IndexType)floor(newLength / width));
-        }
-    } else {
-        Color opIndex(IndexType i) @nogc @safe;
-        void opIndexAssign(Color v, IndexType i) @nogc @safe;
-        void resize(IndexType newLength) @safe;
-    }
+	Color opIndex(IndexType i) @nogc @safe
+	default(IndexedImage) {
+		return IndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)];
+	}
+	
+	void opIndexAssign(Color v, IndexType i) @nogc @safe
+	default(IndexedImage) {
+		IndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)] = v;
+	}
+	
+	void resize(IndexType newLength) @safe
+	default(IndexedImage) {
+		IndexedImage(this).resize(cast(IndexType)(newLength % width), cast(IndexType)floor(newLength / width));
+	}
 }
 
 signature SharedUniformImage : SharedImageBase {
-    static if (is(typeof(this):SharedIndexedImage)) {
-        Color opIndex(IndexType i) @nogc @safe shared {
-            // !__traits(compiles, {typeof(this) t; Color c = t.opIndex(IndexType.init);})
-            return SharedIndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)];
-        }
-        
-        void opIndexAssign(Color v, IndexType i) @nogc @safe shared {
-            // !__traits(compiles, {typeof(this) t; t.opIndexAssign(Color.init, IndexType.init);})
-            SharedIndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)] = v;
-        }
-        
-        void resize(IndexType newLength) @safe shared {
-            SharedIndexedImage(this).resize(cast(IndexType)(newLength % width), cast(IndexType)floor(newLength / width));
-        }
-    } else {
-        Color opIndex(IndexType i) @nogc @safe shared;
-        void opIndexAssign(Color v, IndexType i) @nogc @safe shared;
-        void resize(IndexType newLength) @safe shared;
-    }
+	Color opIndex(IndexType i) @nogc @safe
+	default(SharedIndexedImage) {
+		return SharedIndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)];
+	}
+	
+	void opIndexAssign(Color v, IndexType i) @nogc @safe
+	default(SharedIndexedImage) {
+		SharedIndexedImage(this)[cast(IndexType)(i % width), cast(IndexType)floor(i / width)] = v;
+	}
+	
+	void resize(IndexType newLength) @safe
+	default(SharedIndexedImage) {
+		SharedIndexedImage(this).resize(cast(IndexType)(newLength % width), cast(IndexType)floor(newLength / width));
+	}
 }
 
 signature IndexedImage : ImageBase {
-    static if (is(typeof(this):UniformImage)) {
-        Color opIndex(IndexType x, IndexType y) @nogc @safe {
-            // !__traits(compiles, {typeof(this) t; Color c = t.opIndex(IndexType.init, IndexType.init);})
-            return UniformImage(this)[y*width+x];
-        }
+	Color opIndex(IndexType x, IndexType y) @nogc @safe
+	default(UniformImage) {
+		return UniformImage(this)[y*width+x];
+	}
 
-        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe {
-            // !__traits(compiles, {typeof(this) t; t.opIndexAssign(Color.init, IndexType.init, IndexType.init);})
-            UniformImage(this)[y*width+x] = v;
-        }
-        
-        void resize(IndexType newWidth, IndexType newHeight) @safe {
-            UniformImage(this).resize(newHeight*width+newWidth);
-        }
-    } else {
-        Color opIndex(IndexType x, IndexType y) @nogc @safe;
-        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe;
-        void resize(IndexType newWidth, IndexType newHeight) @safe;
-    }
+	void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe
+	default(UniformImage) {
+		UniformImage(this)[y*width+x] = v;
+	}
+	
+	void resize(IndexType newWidth, IndexType newHeight) @safe
+	default(UniformImage) {
+		UniformImage(this).resize(newHeight*width+newWidth);
+	}
 }
 
 signature SharedIndexedImage : SharedImageBase {
-    static if (is(typeof(this):SharedUniformImage)) {
-        Color opIndex(IndexType x, IndexType y) @nogc @safe shared {
-            // !__traits(compiles, {typeof(this) t; Color c = t.opIndex(IndexType.init, IndexType.init);})
-            return SharedUniformImage(this)[y*width+x];
-        }
+	Color opIndex(IndexType x, IndexType y) @nogc @safe
+	default(SharedUniformImage) {
+		return SharedUniformImage(this)[y*width+x];
+	}
 
-        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe shared {
-            // !__traits(compiles, {typeof(this) t; t.opIndexAssign(Color.init, IndexType.init, IndexType.init);})
-            SharedUniformImage(this)[y*width+x] = v;
-        }
-        
-        void resize(IndexType newWidth, IndexType newHeight) @safe shared {
-            SharedUniformImage(this).resize(newHeight*width+newWidth);
-        }
-    } else {
-        Color opIndex(IndexType x, IndexType y) @nogc @safe shared;
-        void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe shared;
-        void resize(IndexType newWidth, IndexType newHeight) @safe shared;
-    }
+	void opIndexAssign(Color v, IndexType x, IndexType y) @nogc @safe
+	default(SharedUniformImage) {
+		SharedUniformImage(this)[y*width+x] = v;
+	}
+	
+	void resize(IndexType newWidth, IndexType newHeight) @safe
+	default(SharedUniformImage) {
+		SharedUniformImage(this).resize(newHeight*width+newWidth);
+	}
 }
 
 signature Image : UniformImage, IndexedImage {}
